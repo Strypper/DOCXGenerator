@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -18,49 +17,11 @@ namespace OpenXMLWorldDocument
         // Create the document structure and add some text.
         Body docBody = new Body();
         Paragraph p = new Paragraph();
+        Paragraph pagebreak = new Paragraph(new Run(new Break(){ Type = BreakValues.Page }));
         p.Append(new Run(new Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent quam augue, tempus id metus in, laoreet viverra quam. Sed vulputate risus lacus, et dapibus orci porttitor non.")));
         //// Add the table to the body
-        Table tbl = new Table();
-        // Set the style and width for the table.
-        TableProperties tableProp = new TableProperties();
-        TableStyle tableStyle = new TableStyle() { Val = "TableGrid" };
-        //Table Width
-        TableWidth tableWidth = new TableWidth() { Width = "5000", Type = TableWidthUnitValues.Pct };
-        // Apply Style
-        tableProp.Append(tableStyle, tableWidth);
-        tbl.AppendChild(tableProp);
-        //// Create the table properties
-        TableProperties tblProperties = new TableProperties();
-        //// Create Table Borders
-        TableBorders tblBorders = new TableBorders();
-        TopBorder topBorder = new TopBorder();
-        topBorder.Val = new EnumValue<BorderValues>(BorderValues.Thick);
-        topBorder.Color = "Black";
-        tblBorders.AppendChild(topBorder);
-        BottomBorder bottomBorder = new BottomBorder();
-        bottomBorder.Val = new EnumValue<BorderValues>(BorderValues.Thick);
-        bottomBorder.Color = "Black";
-        tblBorders.AppendChild(bottomBorder);
-        RightBorder rightBorder = new RightBorder();
-        rightBorder.Val = new EnumValue<BorderValues>(BorderValues.Thick);
-        rightBorder.Color = "Black";
-        tblBorders.AppendChild(rightBorder);
-        LeftBorder leftBorder = new LeftBorder();
-        leftBorder.Val = new EnumValue<BorderValues>(BorderValues.Thick);
-        leftBorder.Color = "Black";
-        tblBorders.AppendChild(leftBorder);
-        InsideHorizontalBorder insideHBorder = new InsideHorizontalBorder();
-        insideHBorder.Val = new EnumValue<BorderValues>(BorderValues.Thick);
-        insideHBorder.Color = "Black";
-        tblBorders.AppendChild(insideHBorder);
-        InsideVerticalBorder insideVBorder = new InsideVerticalBorder();
-        insideVBorder.Val = new EnumValue<BorderValues>(BorderValues.Thick);
-        insideVBorder.Color = "Red";
-        tblBorders.AppendChild(insideVBorder);
-        //// Add the table borders to the properties
-        tblProperties.AppendChild(tblBorders);
-        //// Add the table properties to the table
-        tbl.AppendChild(tblProperties);
+        WordTable wt = new WordTable();
+        Table tbl = wt.createTable();
         //// Create a new row
         TableRow tr0 = new TableRow();
         //// Add a cell to each column in the row
@@ -129,14 +90,44 @@ namespace OpenXMLWorldDocument
         TableCell tcId47 = new TableCell(new Paragraph(new Run(new Text("Total"))));
         //Add the cells to the row
         tr3.Append(tcName4, tcId47);
+
+        var tr4 = new TableRow();
+        //// Add a cell to each column in the row
+        var tcName5 = new TableCell(new TableCellProperties(){TableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center }}, new ParagraphProperties( new Justification() {Val = JustificationValues.Center}),new Paragraph(new Run(new Text("Item No")){RunProperties = new RunProperties(){ Bold = new Bold() }}));
+        var tcId5 = new TableCell(new TableCellProperties(){TableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center }}, new ParagraphProperties( new Justification() {Val = JustificationValues.Center}),new Paragraph(new Run(new Text("Date"))));
+        var tcId51 = new TableCell(new TableCellProperties(){TableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center }}, new ParagraphProperties( new Justification() {Val = JustificationValues.Center}), new Paragraph(new Run(new Text("Work Done"))));
+        var tcId52 = new TableCell(new TableCellProperties(){TableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center }}, new ParagraphProperties( new Justification() {Val = JustificationValues.Center}),new Paragraph(new Run(new Text("Claimed"))));
+        var tcId53 = new TableCell(new TableCellProperties(){TableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center }}, new ParagraphProperties( new Justification() {Val = JustificationValues.Center}),new Paragraph(new Run(new Text("For Legal Costs Adjudicator's use only"))));
+        //Add the cells to the row
+        tr4.Append(tcName5, tcId5, tcId51, tcId52, tcId53);
+
+        var tr5 = new TableRow();
+        //// Add a cell to each column in the row
+        var tcName6 = new TableCell(new Paragraph(new Run(new Text("D.1.1"))));
+        var tcId6 = new TableCell(new Paragraph(new Run(new Text("17 January 2020 to Completion"))));
+        var tcId61 = new TableCell(new Paragraph(new Run(new Text("Corresponding with Client by way of update in order to advise him of the terms of the final settlement and Order. Bespeaking a copy of the final Order and discharging the relevant Stamp Duty in that regard.Collating all of the Fee Notes and invoices and upon receipt of the settlement cheque, discharging the remaining outlays and accounting to Client therefor.Conducting a review of the paperwork, which underpinned the costs claim to include, inter-alia, Counsel's briefs, the Solicitor's working files (2 volumes), copy Orders, vouchers and fee notes and thereafter, preparing a detailed / statutory Bill of Costs for settlement and / or adjudication.Preparation for and attending Adjudication, completing bill and vouching and extracting Certificate of Adjudication.For all instructions and work not specifically provided for by way of Appendix W charge, having regard to LSRA 2015 and Order 99 of the RSC."))));
+        var tcId62 = new TableCell(new ParagraphProperties( new Justification() {Val = JustificationValues.Right}), new Paragraph(new Run(new Text("€3,000.00"))));
+        var tcId63 = new TableCell(new Paragraph(new Run(new Text(String.Empty))));
+        var tcp2 = new TableCellProperties();
+        TableCellVerticalAlignment tcVA2 = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Bottom };
+        tcp2.Append(tcVA2);
+        tcId62.Append(tcp2);
+        //Add the cells to the row
+        tr5.Append(tcName6, tcId6, tcId61, tcId62, tcId63);
+
+        Table tbl2 = wt.createTable();
         //Add the rows to the table
         tbl.AppendChild(tr0);
         tbl.AppendChild(tr);
         tbl.AppendChild(tr1);
         tbl.AppendChild(tr2);
         tbl.AppendChild(tr3);
+        tbl2.AppendChild(tr4);
+        tbl2.AppendChild(tr5);
         //Add the table to the body
         docBody.Append(tbl);
+        docBody.AppendChild(pagebreak);
+        docBody.AppendChild(tbl2);
         docBody.AppendChild(p);
         mainPart.Document = new Document(docBody);
       }
